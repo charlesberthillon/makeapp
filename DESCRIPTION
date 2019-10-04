@@ -1,9 +1,9 @@
-Package: makeupusage
-Title: An Amazing Shiny App
+Package: makeapp
+Title: A Shiny App Tracking Makeup Collection
 Version: 0.0.0.9000
 Authors@R: person("Sharla", "Gelfand", email = "sharla.gelfand@gmail.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-License: What license is it under?
+Description: A shiny app that tracks my makeup collection value and usage
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 

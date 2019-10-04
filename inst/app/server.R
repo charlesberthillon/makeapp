@@ -1,1 +1,1 @@
-makeupusage:::app_server
+makeapp:::app_server
