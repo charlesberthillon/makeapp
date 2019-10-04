@@ -4,7 +4,7 @@
 \alias{\%m-\%}
 \title{Month subtract operator}
 \usage{
-lhs \%m-\% rhs
+e1 \%m-\% e2
 }
 \description{
 See \code{magrittr::\link[lubridate]{\%m-\%}} for details.

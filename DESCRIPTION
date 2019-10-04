@@ -18,7 +18,10 @@ Imports:
     shinydashboard,
     janitor,
     glue,
-    magrittr
+    magrittr,
+    plotly,
+    ggplot2,
+    scales
 Remotes: 
     Thinkr-open/golem
 RoxygenNote: 6.1.1
