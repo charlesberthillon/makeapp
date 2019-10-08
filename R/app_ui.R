@@ -2,6 +2,7 @@ app_ui <- function() {
   tagList(
     # List the first level UI elements here
     shinydashboard::dashboardPage(
+      skin = "purple",
       shinydashboard::dashboardHeader(),
       shinydashboard::dashboardSidebar(disable = TRUE),
       shinydashboard::dashboardBody(
@@ -18,8 +19,8 @@ app_ui <- function() {
           shinydashboard::box(
             width = 12,
             shiny::splitLayout(
-            shiny::dateInput("start_date", "Usage Start", value = lubridate::today() %m-% months(1)),
-            shiny::dateInput("end_date", "Usage End")
+              shiny::dateInput("start_date", "Usage Start", value = lubridate::today() %m-% months(1)),
+              shiny::dateInput("end_date", "Usage End")
             )
           )
         ),
@@ -28,16 +29,11 @@ app_ui <- function() {
           mod_usage_table_ui("eyeshadow_bottom", "Eyeshadows", "Bottom")
         ),
         shiny::fluidRow(
-          mod_usage_table_ui("eyes_top", "Eye", "Top"),
-          mod_usage_table_ui("eyes_bottom", "Eye", "Bottom")
+          mod_usage_table_ui("eyes", "Eye", "All"),
+          mod_usage_table_ui("face", "Face", "All")
         ),
         shiny::fluidRow(
-          mod_usage_table_ui("face_top", "Face", "Top"),
-          mod_usage_table_ui("face_bottom", "Face", "Bottom")
-        ),
-        shiny::fluidRow(
-          mod_usage_table_ui("lip_top", "Lip", "Top"),
-          mod_usage_table_ui("lip_bottom", "Lip", "Bottom")
+          mod_usage_table_ui("lips", "Lip", "All")
         )
       )
     )

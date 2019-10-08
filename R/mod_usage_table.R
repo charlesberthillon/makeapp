@@ -3,7 +3,11 @@ mod_usage_table_ui <- function(id, category, direction) {
   ns <- NS(id)
   tagList(
     shinydashboard::box(
-      title = glue::glue("{direction} 10 {ifelse(direction == 'Top', 'Most', 'Least')} Used {category}{ifelse(category == 'Eyeshadows', '', ' Products')}"),
+      title = if (direction %in% c("Top", "Bottom")) {
+        glue::glue("{direction} 10 {ifelse(direction == 'Top', 'Most', 'Least')} Used {category}{ifelse(category == 'Eyeshadows', '', ' Products')}")
+      } else {
+        glue::glue("{category} Products Usage")
+      },
       width = 6,
       status = ifelse(direction == "Top", "success", "danger"),
       collapsible = TRUE,
