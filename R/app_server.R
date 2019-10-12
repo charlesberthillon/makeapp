@@ -21,7 +21,8 @@ app_server <- function(input, output, session) {
       hoverinfo = "text",
       text = ~ paste0("$", value, " (", n, " items)")
     ) %>%
-      plotly::layout(xaxis = list(title = "Category"), yaxis = list(title = "Value", tickprefix = "$")) %>%
+      plotly::layout(xaxis = list(title = "Category", fixedrange = TRUE),
+                     yaxis = list(title = "Value", tickprefix = "$", fixedrange = TRUE)) %>%
       plotly::config(displayModeBar = FALSE)
   })
 
@@ -35,8 +36,8 @@ app_server <- function(input, output, session) {
       text = ~ paste0(date, ": $", value, " (", n, " items)")
     ) %>%
       plotly::layout(
-        xaxis = list(title = "Date"),
-        yaxis = list(title = "Collection Value", tickprefix = "$")
+        xaxis = list(title = "Date", fixedrange = TRUE),
+        yaxis = list(title = "Collection Value", tickprefix = "$", fixedrange = TRUE)
       ) %>%
       plotly::config(displayModeBar = FALSE)
   })
