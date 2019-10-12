@@ -12,9 +12,10 @@ current_value <- function(collection) {
 current_value_by_category <- function(collection) {
   collection %>%
     dplyr::filter(is.na(date_finished)) %>%
-    dplyr::group_by(category) %>%
+    dplyr::left_join(product_categories, by = "category") %>%
+    dplyr::group_by(main_category) %>%
     dplyr::summarise(
-      n = sum(n),
+      n = n(),
       value = sum(value)
     )
 }

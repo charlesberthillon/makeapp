@@ -9,9 +9,17 @@ app_ui <- function() {
         shiny::fluidRow(
           shiny::tags$head(shiny::tags$style(shiny::HTML(".small-box {height: 200px}"))),
           shinydashboard::valueBoxOutput("collection_current_value", width = 4),
+
+          shinydashboard::box(
+            plotly::plotlyOutput("current_value_by_category", height = "175px"),
+            width = 8,
+            height = "200px"
+          )
+        ),
+        shiny::fluidRow(
           shinydashboard::box(
             plotly::plotlyOutput("collection_value_over_time", height = "175px"),
-            width = 8,
+            width = 6,
             height = "200px"
           )
         ),
