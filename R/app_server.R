@@ -16,19 +16,15 @@ app_server <- function(input, output, session) {
   collection_value_over_time <- value_over_time(collection)
 
   output$collection_value_over_time <- plotly::renderPlotly(
-    plotly::ggplotly(
-      ggplot2::ggplot(
-        collection_value_over_time,
-        ggplot2::aes(
-          x = date,
-          y = value
-        )
-      ) +
-        ggplot2::geom_line() +
-        ggplot2::scale_y_continuous("Collection Value", labels = scales::dollar) +
-        ggplot2::scale_x_date("Date") +
-        ggplot2::theme_minimal()
-    )
+    plotly::plot_ly(collection_value_over_time,
+            x = ~date, y = ~value,
+            type = 'scatter',
+            mode = 'lines+markers',
+            hoverinfo = 'text',
+            text = ~ paste0(date, ": $", value, " (", n, " items)")) %>%
+      plotly::layout(xaxis = list(title = "Date"),
+             yaxis = list(title = "Collection Value", tickprefix = "$")) %>%
+      plotly::config(displayModeBar = FALSE)
   )
 
   callModule(mod_usage_table_server, "eyeshadow_top", usage = usage, collection = collection, category = "Eyeshadows", direction = "Top", start_date = shiny::reactive(input$start_date), end_date = shiny::reactive(input$end_date))
