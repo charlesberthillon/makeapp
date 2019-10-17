@@ -21,6 +21,12 @@ app_ui <- function() {
             plotly::plotlyOutput("collection_value_over_time", height = "175px"),
             width = 6,
             height = "200px"
+          ),
+
+          shinydashboard::box(
+            plotly::plotlyOutput("eyeshadow_pan_percentage_over_time", height = "175px"),
+            width = 6,
+            height = "200px"
           )
         ),
         shiny::fluidRow(

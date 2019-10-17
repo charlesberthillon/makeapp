@@ -2,7 +2,7 @@ app_server <- function(input, output, session) {
   googlesheets4::sheets_deauth()
   collection <- googlesheets4::read_sheet("1FPMlptmefZZ9wtmOdogWR4UVd-WEEWI7u0KztRPNJuA", sheet = "Collection") %>%
     janitor::clean_names() %>%
-    dplyr::mutate_at(dplyr::vars(date_finished), as.Date)
+    dplyr::mutate_at(dplyr::vars(dplyr::contains("date")), as.Date)
 
   usage <- googlesheets4::read_sheet("1FPMlptmefZZ9wtmOdogWR4UVd-WEEWI7u0KztRPNJuA", sheet = "Usage") %>%
     janitor::clean_names()
@@ -38,6 +38,22 @@ app_server <- function(input, output, session) {
       plotly::layout(
         xaxis = list(title = "Date", fixedrange = TRUE),
         yaxis = list(title = "Collection Value", tickprefix = "$", fixedrange = TRUE)
+      ) %>%
+      plotly::config(displayModeBar = FALSE)
+  })
+
+  output$eyeshadow_pan_percentage_over_time <-plotly::renderPlotly({
+    eyeshadow_pan_percentage_over_time <- eyeshadow_pan_percentage_over_time(collection, usage)
+    plotly::plot_ly(eyeshadow_pan_percentage_over_time,
+                    x = ~date, y = ~ pan_percent*100,
+                    type = "scatter",
+                    mode = "lines+markers",
+                    hoverinfo = "text",
+                    text = ~ paste0(date, ": ", scales::percent(pan_percent), " (", pans, " pans, ", eyeshadows, " eyeshadows)")
+    ) %>%
+      plotly::layout(
+        xaxis = list(title = "Date", fixedrange = TRUE),
+        yaxis = list(title = "Pan Percentage", ticksuffix = "%", fixedrange = TRUE, range = c(0, 100))
       ) %>%
       plotly::config(displayModeBar = FALSE)
   })
