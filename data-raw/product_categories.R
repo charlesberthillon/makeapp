@@ -12,6 +12,7 @@ product_categories <- tibble::tribble(
   "Mascara", "Eye",
   "Eye glitter", "Eye",
   "Cream eyeshadow", "Eye",
+  "Liquid eyeshadow", "Eye",
   "Eyeshadow", "Eyeshadows",
   "Lipgloss", "Lip",
   "Lipstick", "Lip"
