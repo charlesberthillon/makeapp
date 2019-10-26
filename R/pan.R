@@ -2,11 +2,18 @@ eyeshadow_pan_percentage_over_time <- function(collection, usage) {
   eyeshadow_collection <- collection %>%
     dplyr::filter(category == "Eyeshadow")
 
-  pan_date <- eyeshadow_collection %>%
-    dplyr::filter(pan) %>%
-    dplyr::distinct(date = date_panned)
+  dates <- eyeshadow_collection %>%
+    dplyr::select(date_added, date_finished, date_panned) %>%
+    tidyr::pivot_longer(
+      cols = c(date_added, date_finished, date_panned),
+      names_to = "type",
+      values_to = "date",
+      names_prefix = "date_"
+    ) %>%
+    dplyr::filter(!is.na(date)) %>%
+    dplyr::distinct(date)
 
-  pans_by_date <- pan_date %>%
+  pans_by_date <- dates %>%
     dplyr::mutate(pans = purrr::map_dbl(
       date,
       ~ eyeshadow_collection %>%
@@ -14,7 +21,7 @@ eyeshadow_pan_percentage_over_time <- function(collection, usage) {
         nrow()
     ))
 
-  collection_by_date <- pan_date %>%
+  collection_by_date <- dates %>%
     dplyr::mutate(eyeshadows = purrr::map_dbl(
       date,
       ~ eyeshadow_collection %>%
@@ -24,5 +31,6 @@ eyeshadow_pan_percentage_over_time <- function(collection, usage) {
 
   pans_by_date %>%
     dplyr::left_join(collection_by_date, by = "date") %>%
-    dplyr::mutate(pan_percent = pans / eyeshadows)
+    dplyr::mutate(pan_percent = pans / eyeshadows) %>%
+    dplyr::arrange(date)
 }

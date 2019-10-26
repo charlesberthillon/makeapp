@@ -7,7 +7,6 @@ product_usage <- function(usage, start_date, end_date) {
 
 #' @export
 rank_usage_by_category <- function(product_usage, collection, category = c("Face", "Eye", "Lip", "Eyeshadows"), direction = c("Top", "Bottom", "All"), start_date, end_date) {
-
   category_product_usage <- product_usage %>%
     dplyr::left_join(product_categories, by = "category") %>%
     dplyr::filter(main_category %in% !!category) %>%
@@ -36,7 +35,8 @@ rank_usage_by_category <- function(product_usage, collection, category = c("Face
   } else if (direction == "All") {
     category_collection <- collection %>%
       dplyr::left_join(product_categories, by = "category") %>%
-      dplyr::filter(main_category %in% !!category,
+      dplyr::filter(
+        main_category %in% !!category,
         date_added >= lubridate::ymd(start_date),
         (is.na(date_finished) | date_finished >= lubridate::ymd(start_date))
       )

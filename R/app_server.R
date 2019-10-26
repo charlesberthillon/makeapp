@@ -21,8 +21,10 @@ app_server <- function(input, output, session) {
       hoverinfo = "text",
       text = ~ paste0("$", value, " (", n, " items)")
     ) %>%
-      plotly::layout(xaxis = list(title = "Category", fixedrange = TRUE),
-                     yaxis = list(title = "Value", tickprefix = "$", fixedrange = TRUE)) %>%
+      plotly::layout(
+        xaxis = list(title = "Category", fixedrange = TRUE),
+        yaxis = list(title = "Value", tickprefix = "$", fixedrange = TRUE)
+      ) %>%
       plotly::config(displayModeBar = FALSE)
   })
 
@@ -42,14 +44,14 @@ app_server <- function(input, output, session) {
       plotly::config(displayModeBar = FALSE)
   })
 
-  output$eyeshadow_pan_percentage_over_time <-plotly::renderPlotly({
+  output$eyeshadow_pan_percentage_over_time <- plotly::renderPlotly({
     eyeshadow_pan_percentage_over_time <- eyeshadow_pan_percentage_over_time(collection, usage)
     plotly::plot_ly(eyeshadow_pan_percentage_over_time,
-                    x = ~date, y = ~ pan_percent*100,
-                    type = "scatter",
-                    mode = "lines+markers",
-                    hoverinfo = "text",
-                    text = ~ paste0(date, ": ", scales::percent(pan_percent), " (", pans, " pans, ", eyeshadows, " eyeshadows)")
+      x = ~date, y = ~ pan_percent * 100,
+      type = "scatter",
+      mode = "lines+markers",
+      hoverinfo = "text",
+      text = ~ paste0(date, ": ", scales::percent(pan_percent), " (", pans, " pans, ", eyeshadows, " eyeshadows)")
     ) %>%
       plotly::layout(
         xaxis = list(title = "Date", fixedrange = TRUE),

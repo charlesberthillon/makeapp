@@ -22,33 +22,37 @@ current_value_by_category <- function(collection) {
 
 #' @export
 value_over_time <- function(collection) {
-  added <- collection %>%
-    dplyr::select(date = date_added, value) %>%
-    dplyr::mutate(n = 1)
-
-  finished <- collection %>%
-    dplyr::select(date = date_finished, value) %>%
-    dplyr::mutate(value = -value) %>%
-    dplyr::mutate(n = -1)
-
-  added_and_finished <- added %>%
-    dplyr::bind_rows(finished) %>%
-    dplyr::filter(!is.na(date))
+  added_and_finished <- collection %>%
+    dplyr::select(date_added, date_finished, value) %>%
+    tidyr::pivot_longer(
+      cols = c(date_added, date_finished),
+      names_to = "type",
+      values_to = "date",
+      names_prefix = "date_"
+    ) %>%
+    dplyr::filter(!is.na(date)) %>%
+    dplyr::mutate(n = 1) %>%
+    dplyr::mutate_at(dplyr::vars(value, n), ~ ifelse(type == "finished", .x * -1, .x))
 
   dates <- added_and_finished %>%
     dplyr::distinct(date) %>%
     dplyr::mutate_at(dplyr::vars(date), as.Date)
 
   dates %>%
-    dplyr::mutate(data = purrr::map(
-      date,
-      ~ added_and_finished %>%
-        dplyr::filter(date <= .x) %>%
-        dplyr::summarise(value = sum(value),
-                         n = sum(n)) %>%
-        dplyr::select(value, n)
-    ),
-    value = purrr::map_dbl(data, "value"),
-    n = purrr::map_dbl(data, "n")) %>%
-    dplyr::select(-data)
+    dplyr::mutate(
+      data = purrr::map(
+        date,
+        ~ added_and_finished %>%
+          dplyr::filter(date <= .x) %>%
+          dplyr::summarise(
+            value = sum(value),
+            n = sum(n)
+          ) %>%
+          dplyr::select(value, n)
+      ),
+      value = purrr::map_dbl(data, "value"),
+      n = purrr::map_dbl(data, "n")
+    ) %>%
+    dplyr::select(-data) %>%
+    dplyr::arrange(date)
 }
