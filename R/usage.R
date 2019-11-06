@@ -21,7 +21,7 @@ rank_usage_by_category <- function(product_usage, collection, category = c("Face
       dplyr::left_join(product_categories, by = "category") %>%
       dplyr::filter(
         main_category %in% !!category,
-        date_added >= lubridate::ymd(start_date),
+        date_added <= lubridate::ymd(end_date),
         (is.na(date_finished) | date_finished >= lubridate::ymd(start_date))
       )
 
@@ -37,7 +37,7 @@ rank_usage_by_category <- function(product_usage, collection, category = c("Face
       dplyr::left_join(product_categories, by = "category") %>%
       dplyr::filter(
         main_category %in% !!category,
-        date_added >= lubridate::ymd(start_date),
+        date_added <= lubridate::ymd(end_date),
         (is.na(date_finished) | date_finished >= lubridate::ymd(start_date))
       )
 
