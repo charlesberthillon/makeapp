@@ -16,21 +16,29 @@ eyeshadow_pan_percentage_over_time <- function(collection, usage) {
   pans_by_date <- dates %>%
     dplyr::mutate(pans = purrr::map_dbl(
       date,
-      ~ eyeshadow_collection %>%
-        dplyr::filter(date_panned <= .x) %>%
-        nrow()
+      ~ pans_by_date(eyeshadow_collection, .x)
     ))
 
   collection_by_date <- dates %>%
     dplyr::mutate(eyeshadows = purrr::map_dbl(
       date,
-      ~ eyeshadow_collection %>%
-        dplyr::filter(date_added <= .x & (is.na(date_finished) | date_finished >= .x)) %>%
-        nrow()
+      ~ collection_by_date(eyeshadow_collection, .x)
     ))
 
   pans_by_date %>%
     dplyr::left_join(collection_by_date, by = "date") %>%
     dplyr::mutate(pan_percent = pans / eyeshadows) %>%
     dplyr::arrange(date)
+}
+
+pans_by_date <- function(collection, date) {
+  collection %>%
+    dplyr::filter(date_panned <= date & (!(date_finished <= date) | is.na(date_finished))) %>%
+    nrow()
+}
+
+collection_by_date <- function(collection, date) {
+  collection %>%
+    dplyr::filter(date_added <= date & (!(date_finished <= date) | is.na(date_finished))) %>%
+    nrow()
 }
