@@ -1,11 +1,7 @@
 app_server <- function(input, output, session) {
   googlesheets4::sheets_deauth()
-  collection <- googlesheets4::read_sheet("1FPMlptmefZZ9wtmOdogWR4UVd-WEEWI7u0KztRPNJuA", sheet = "Collection") %>%
-    janitor::clean_names() %>%
-    dplyr::mutate_at(dplyr::vars(dplyr::contains("date")), as.Date)
-
-  usage <- googlesheets4::read_sheet("1FPMlptmefZZ9wtmOdogWR4UVd-WEEWI7u0KztRPNJuA", sheet = "Usage") %>%
-    janitor::clean_names()
+  collection <- read_collection()
+  usage <- read_usage()
 
   output$collection_current_value <- shinydashboard::renderValueBox({
     collection_current_value <- current_value(collection)
